@@ -15,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import uk.ac.aber.dcs.cs31620.faa.databinding.FragmentHomeBinding
 import uk.ac.aber.dcs.cs31620.faa.model.RecentCatsViewModel
@@ -28,21 +27,23 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         homeFragmentBinding = FragmentHomeBinding.inflate(inflater, container, false)
 
         val featuredCatImg = homeFragmentBinding.featuredImage
         val catViewModel: RecentCatsViewModel by viewModels()
         val recentCats = catViewModel.recentCats
 
-        recentCats.observe(viewLifecycleOwner){ cats ->
-            val catPos = Random.nextInt(cats.size)
-            val catImage = cats[catPos].imagePath
-            Log.i("FAA", cats.size.toString())
-            if (catImage.isNotEmpty()) {
-                Glide.with(this)
-                    .load(Uri.parse("file:///android_asset/images/${catImage}"))
-                    .into(featuredCatImg)
+        recentCats.observe(viewLifecycleOwner){
+            if (it.isNotEmpty()) {
+                val catPos = Random.nextInt(it.size)
+                val catImage = it[catPos].imagePath
+                Log.i("FAA", it.size.toString())
+                if (catImage.isNotEmpty()) {
+                    Glide.with(this)
+                        .load(Uri.parse("file:///android_asset/images/${catImage}"))
+                        .into(featuredCatImg)
+                }
             }
         }
 

@@ -32,12 +32,6 @@ class RecentCatsViewModel(application: Application) : AndroidViewModel(applicati
         val endDate = LocalDateTime.now().plusDays(365)
         val pastDate =  LocalDateTime.now().minusDays(NUM_DAYS_RECENT)
 
-        val catList: LiveData<List<Cat>> = repository.getAllCats()
-        Log.i("FAA", "Before forEach")
-        catList.value?.forEach {
-            Log.i("FAA", it.name)
-        }
-
         return repository.getRecentCats(pastDate, endDate)
     }
 

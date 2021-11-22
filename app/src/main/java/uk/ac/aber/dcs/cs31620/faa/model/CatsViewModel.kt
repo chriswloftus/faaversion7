@@ -29,8 +29,8 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
     private var breed = anyBreed
 
     fun getCats(breed: String, gender: String, ageConstraint: String): LiveData<List<Cat>> {
-        var startDate = LocalDateTime.now()
-        var endDate = LocalDateTime.now()
+        val startDate: LocalDateTime
+        val endDate: LocalDateTime
         var changed = false
 
         // Did anything change since last time?
@@ -56,7 +56,7 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
                 catList = repository.getCatsByBreed(breed)
             }
             else if(breed == anyBreed && gender != anyGender && ageConstraint == anyAge){
-                catList = repository.getCatsByGender(Gender.valueOf(gender.toUpperCase(Locale.ROOT)))
+                catList = repository.getCatsByGender(Gender.valueOf(gender.uppercase(Locale.ROOT)))
             }
             else if(breed == anyBreed && gender == anyGender && ageConstraint != anyAge){
                 startDate = getStartDate(ageConstraint)
@@ -74,12 +74,14 @@ class CatsViewModel(application: Application) : AndroidViewModel(application) {
             else if (breed == anyBreed && gender != anyGender && ageConstraint != anyAge){
                 startDate = getStartDate(ageConstraint)
                 endDate = getEndDate(ageConstraint)
-                catList = repository.getCatsByGenderAndBornBetweenDates(Gender.valueOf(gender.toUpperCase(Locale.ROOT)), startDate, endDate)
+                catList = repository.getCatsByGenderAndBornBetweenDates(Gender.valueOf(gender.uppercase(
+                    Locale.ROOT
+                )), startDate, endDate)
             }
             else if(breed != anyBreed &&  gender != anyGender && ageConstraint != anyAge){
                 startDate = getStartDate(ageConstraint)
                 endDate = getEndDate(ageConstraint)
-                catList = repository.getCats(breed, Gender.valueOf(gender.toUpperCase(Locale.ROOT)), startDate, endDate)
+                catList = repository.getCats(breed, Gender.valueOf(gender.uppercase(Locale.ROOT)), startDate, endDate)
             } else {
                 catList = repository.getAllCats()
             }
